@@ -17,7 +17,7 @@ object HTTPServer extends JsonSupport {
   implicit val timeout: FiniteDuration = 10.seconds
   val kafka = new SignUpProducer(system)
 
-  val signUp = (put & pathEndOrSingleSlash & entity(as[SignUpClient])){ entity =>
+  val signUp: Route = (put & pathEndOrSingleSlash & entity(as[SignUpClient])){ entity =>
     val signUpServer = SignUpServer(entity)
     val action = kafka.send(SignUpServer(entity))
     onComplete(action){

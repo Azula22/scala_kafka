@@ -6,6 +6,7 @@ case class SignUpServer(email: String, password: String, id: UUID)
 
 object SignUpServer {
 
-  def apply(s: SignUpClient) = SignUpServer(s.email, s.password, UUID.randomUUID())
+  def apply(s: SignUpClient): SignUpServer =
+    SignUpServer(s.email, s.password, UUID.randomUUID())
 
 }
