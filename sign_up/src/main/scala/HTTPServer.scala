@@ -19,7 +19,7 @@ object HTTPServer extends JsonSupport {
 
   val signUp: Route = (put & pathEndOrSingleSlash & entity(as[SignUpClient])){ entity =>
     val signUpServer = SignUpServer(entity)
-    val action = kafka.send(SignUpServer(entity))
+    val action = kafka.publish(SignUpServer(entity))
     onComplete(action){
       case Success(_) => complete(signUpServer.id.toString)
       case Failure(_) => complete("KO")

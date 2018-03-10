@@ -12,15 +12,15 @@ import scala.concurrent.Future
 
 class SignUpProducer(system: ActorSystem) {
 
-  private val BROKER_LIST = "kafka:9092"
+  private val BROKER_LIST = "kafka:9090"
   private val TOPIC = "all"
 
   private val producerSetting = ProducerSettings[String, SignUpServer](system, None, None)
     .withBootstrapServers(BROKER_LIST)
 
-  def send(su: SignUpServer)(implicit mat: ActorMaterializer): Future[Done] = Source
+  def publish(su: SignUpServer)(implicit mat: ActorMaterializer): Future[Done] = Source
     .single(su)
-    .map(su => new ProducerRecord[String, SignUpServer](BROKER_LIST, su))
+    .map(su => new ProducerRecord[String, SignUpServer](TOPIC, su))
     .runWith(Producer.plainSink[String, SignUpServer](producerSetting))
 
 }
