@@ -8,21 +8,29 @@ val kafka = "com.typesafe.akka" %% "akka-stream-kafka" % "0.19"
 
 val akka_http = Seq(
   "com.typesafe.akka" %% "akka-http"   % "10.1.0-RC2",
-  "com.typesafe.akka" %% "akka-stream" % "2.5.9",
-  "com.typesafe.akka" %% "akka-http-spray-json" % "10.1.0"
+  "com.typesafe.akka" %% "akka-stream" % "2.5.9"
 )
+
+val slick = Seq(
+  "com.typesafe.slick" %% "slick" % "3.2.2",
+  "org.slf4j" % "slf4j-nop" % "1.6.4",
+  "com.typesafe.slick" %% "slick-hikaricp" % "3.2.2"
+)
+
+val jsonParser = "org.json4s" %% "json4s-jackson" % "3.6.0-M2"
+
+val bCrypt = "org.mindrot" % "jbcrypt" % "0.4"
 
 lazy val sign_up = (project in file("sign_up"))
   .enablePlugins(DockerPlugin)
   .settings(
     libraryDependencies ++=
-      akka_http :+ kafka
+      akka_http :+ kafka :+ jsonParser
   )
 
 lazy val persistance = (project in file("persistance"))
   .enablePlugins(DockerPlugin)
   .settings(
-    libraryDependencies ++= Seq(
-      kafka
-    )
+    libraryDependencies ++=
+      slick :+ kafka :+ bCrypt :+ jsonParser
   )
