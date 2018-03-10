@@ -1,11 +1,8 @@
+
 object Main {
 
-  object Main {
-
-    def main(args: Array[String]) {
-      //TODO implement
-    }
-
+  def main(args: Array[String]) {
+    new PersistanceConsumer()
   }
 
 }
