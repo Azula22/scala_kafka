@@ -1,13 +1,10 @@
 #!/bin/bash
 
-set -e
-set -x
+set -e  # exit immediately if a command exits with a non-zero status
+set -x  # print all executed commands on terminal
 
 PROJECT_DIR=$1
 MODULE_NAME=$2
 VERSION=$3
-
-zookeeper:2554 -t 30 -- echo "Zookeeper started"
-kafka:9092 -t 30 -- echo "Kafka started"
 
 java -jar $PROJECT_DIR/"$MODULE_NAME"-assembly-"$VERSION".jar;
