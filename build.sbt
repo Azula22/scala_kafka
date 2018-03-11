@@ -1,6 +1,6 @@
 name := "scala_kafka_docker"
 
-version := "0.1"
+version := "1.0"
 
 scalaVersion := "2.12.4"
 
@@ -21,13 +21,13 @@ val jsonParser = "org.json4s" %% "json4s-jackson" % "3.6.0-M2"
 
 val bCrypt = "org.mindrot" % "jbcrypt" % "0.4"
 
-val dockerSettings = Seq(
+def dockerSettings = Seq(
 
   dockerfile in docker := {
     val artifactSource: File = assembly.value
     val artifactTargetPath = s"/project/${artifactSource.name}"
-    val projectDir = "/project/"
     val scriptSourceDir = baseDirectory.value / "../script"
+    val projectDir = "/project/"
 
     new Dockerfile {
       from("openjdk:8-jre")
