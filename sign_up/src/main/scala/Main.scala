@@ -10,7 +10,7 @@ object Main {
     implicit val exec: ExecutionContext = system.dispatcher
     implicit val materializer: ActorMaterializer = ActorMaterializer.create(system)
     val kafka = new SignUpProducer()
-    new HTTPServer(kafka, materializer).start("localhost", 8080)
+    new HTTPServer(kafka, materializer).start("0.0.0.0", 8080)
   }
 
 }

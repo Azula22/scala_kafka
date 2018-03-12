@@ -35,6 +35,7 @@ def dockerSettings = Seq(
       copy(scriptSourceDir, projectDir)
       entryPoint(s"/project/start.sh")
       cmd(projectDir, s"${name.value}", s"${version.value}")
+      expose(8080)
     }
   },
   imageNames in docker := Seq(
