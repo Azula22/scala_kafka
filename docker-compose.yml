@@ -2,12 +2,12 @@ version: '2'
 
 services:
   zookeeper:
-    image: saumitras01/zookeeper:v3.4.9
+    image: wurstmeister/zookeeper
     ports:
       - "2181:2181"
 
   kafka:
-    image: saumitras01/kafka:latest
+    image: wurstmeister/kafka
     ports:
       - "9092:9092"
     depends_on:
@@ -23,7 +23,7 @@ services:
     image: sign_up:latest
     ports:
       - "8080:8080"
-    tty: true
+#    tty: true
     depends_on:
       - kafka
 
@@ -31,6 +31,6 @@ services:
     image: persistance:latest
     ports:
       - "8085:8085"
-    tty: true
+#    tty: true
     depends_on:
       - kafka
