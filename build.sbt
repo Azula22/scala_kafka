@@ -12,14 +12,13 @@ val akka_http = Seq(
 )
 
 val slick = Seq(
-  "com.typesafe.slick" %% "slick" % "3.2.2",
+  "com.typesafe.slick" %% "slick" % "3.2.1",
   "org.slf4j" % "slf4j-nop" % "1.6.4",
-  "com.typesafe.slick" %% "slick-hikaricp" % "3.2.2"
+  "com.typesafe.slick" %% "slick-hikaricp" % "3.2.1",
+  "org.postgresql" % "postgresql" % "42.2.1"
 )
 
 val jsonParser = "org.json4s" %% "json4s-jackson" % "3.6.0-M2"
-
-val bCrypt = "org.mindrot" % "jbcrypt" % "0.4"
 
 def dockerSettings = Seq(
 
@@ -55,6 +54,6 @@ lazy val persistance = (project in file("persistance"))
   .enablePlugins(DockerPlugin)
   .settings(
     libraryDependencies ++=
-      slick :+ kafka :+ bCrypt :+ jsonParser,
+      slick :+ kafka :+ jsonParser,
     dockerSettings
   )

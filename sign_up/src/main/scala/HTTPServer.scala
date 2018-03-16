@@ -32,7 +32,6 @@ class HTTPServer(kafka: SignUpProducer, implicit val mat: ActorMaterializer) {
           err.printStackTrace()
           complete("KO")
       }.get
-
   }
 
   def start(host: String, port: Int)

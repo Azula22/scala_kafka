@@ -5,7 +5,7 @@ import org.json4s.jackson.JsonMethods._
 
 import scala.util.Try
 
-case class SignUpRow(id: UUID, email: String, password: String)
+case class SignUpRow(id: String, email: String, password: String)
 
 object SignUpRow {
   implicit val _ = DefaultFormats
