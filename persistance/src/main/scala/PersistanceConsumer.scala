@@ -33,12 +33,12 @@ class PersistanceConsumer {
     new TopicPartition(TOPIC, partition)
   )
 
-  Consumer.plainSource(consumerSettings, subscription)
+  Consumer.committableSource(consumerSettings, subscription)
     .mapAsync(1) { msg =>
       (for {
-        r <- Future.fromTry(SignUpRow.apply(msg.value()))
+        r <- Future.fromTry(SignUpRow.apply(msg.record.value()))
         _ <- DB.create(r)
-      } yield ()).recoverWith{ case err => println(err.getMessage); Future.successful{}}
-    }
+      } yield msg).recoverWith { case err => println(err.getMessage); Future.successful{msg}}}
+    .map(_.committableOffset.commitScaladsl())
     .runWith(Sink.ignore)
 }

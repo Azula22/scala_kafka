@@ -15,7 +15,7 @@ class SignUpProducer(implicit val mat: ActorMaterializer) {
   implicit val system: ActorSystem = mat.system
   implicit val exec: ExecutionContextExecutor = system.dispatcher
 
-  private val BROKER_LIST = "localhost:9092"
+  private val BROKER_LIST = "kafka:9092"
   private val TOPIC = "all"
 
   private val producerSetting = ProducerSettings[Array[Byte], String](system, new ByteArraySerializer, new StringSerializer)
