@@ -12,13 +12,21 @@ val akka_http = Seq(
 )
 
 val slick = Seq(
-  "com.typesafe.slick" %% "slick" % "3.2.1",
+  "com.typesafe.slick" %% "slick" % "3.2.0",
   "org.slf4j" % "slf4j-nop" % "1.6.4",
-  "com.typesafe.slick" %% "slick-hikaricp" % "3.2.1",
-  "org.postgresql" % "postgresql" % "42.2.1"
+  "com.typesafe.slick" %% "slick-hikaricp" % "3.2.0",
+  "org.postgresql" % "postgresql" % "42.2.2"
 )
 
 val jsonParser = "org.json4s" %% "json4s-jackson" % "3.6.0-M2"
+
+val testLibs = Seq(
+  "org.scalamock" %% "scalamock" % "4.1.0" % Test,
+  "org.scalatest" %% "scalatest" % "3.2.0-SNAP10" % Test,
+  "com.typesafe.akka" %% "akka-testkit" % "2.5.11" % Test,
+  "com.typesafe.akka" %% "akka-http-testkit" % "10.1.0" % Test,
+  "org.scalacheck" %% "scalacheck" % "1.13.5" % Test
+)
 
 def dockerSettings = Seq(
 
@@ -45,7 +53,7 @@ def dockerSettings = Seq(
 lazy val sign_up = (project in file("sign_up"))
   .enablePlugins(DockerPlugin)
   .settings(
-    libraryDependencies ++=
+    libraryDependencies :=
       akka_http :+ kafka :+ jsonParser,
     dockerSettings
   )
@@ -53,7 +61,11 @@ lazy val sign_up = (project in file("sign_up"))
 lazy val persistance = (project in file("persistance"))
   .enablePlugins(DockerPlugin)
   .settings(
-    libraryDependencies ++=
+    libraryDependencies :=
       slick :+ kafka :+ jsonParser,
     dockerSettings
   )
+
+lazy val tests = (project in file("tests"))
+  .dependsOn(sign_up, persistance)
+  .settings(libraryDependencies := testLibs ++ akka_http)

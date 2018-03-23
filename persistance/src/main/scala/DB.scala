@@ -1,6 +1,8 @@
+import java.util.UUID
+
 import slick.jdbc.PostgresProfile.api._
 
-import scala.concurrent.ExecutionContext
+import scala.concurrent.{ExecutionContext, Future}
 
 object DB {
 
@@ -12,7 +14,7 @@ object DB {
     sqlu"""
         CREATE TABLE IF NOT EXISTS #$tableName (
             id CHARACTER VARYING PRIMARY KEY,
-            email CHARACTER VARYING NOT NULL UNIQUE,
+            email CHARACTER VARYING NOT NULL,
             password CHARACTER VARYING NOT NULL
         );
   """
@@ -21,14 +23,22 @@ object DB {
   db.run(createNeededTable)
 
   def create(row: SignUpRow)(implicit ex: ExecutionContext) = {
-    println(row)
     val q = sqlu"""
           INSERT INTO #$tableName VALUES ('#${row.id}', '#${row.email}', '#${row.password}')
           ON CONFLICT DO NOTHING;
         """
-    val r = db.run(q)
-    r.failed.foreach(err => println(err.getMessage))
-    r
+    db.run(q)
+  }
+
+  def get(id: UUID)(implicit ex: ExecutionContext) = {
+    val q = sql"""
+               SELECT * FROM #$tableName WHERE id = '#${id.toString}';
+        """.as[(String, String, String)].flatMap {
+      case Vector() => DBIO.failed(new Throwable(s"No user with id $id"))
+      case Vector(el) => DBIO.successful(el)
+      case v => DBIO.failed(new Throwable(s"There are ${v.length} users with this id, but supposed to be one"))
+    }
+    db.run(q)
   }
 
 }

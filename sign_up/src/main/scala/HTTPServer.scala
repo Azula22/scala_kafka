@@ -19,7 +19,7 @@ class HTTPServer(kafka: SignUpProducer, implicit val mat: ActorMaterializer) {
   private implicit val timeout: FiniteDuration = 10.seconds
   private implicit val formats: DefaultFormats.type = DefaultFormats
 
-  private val signUp: Route = (put & pathEndOrSingleSlash & entity(as[String])){ entity =>
+  val signUp: Route = (put & pathEndOrSingleSlash & entity(as[String])){ entity =>
     Try(parse(entity).extract[SignUpClient])
       .map { data =>
         val signUpServer = SignUpServer(data)

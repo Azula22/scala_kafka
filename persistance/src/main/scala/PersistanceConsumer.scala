@@ -1,9 +1,9 @@
-import akka.Done
 import akka.actor.ActorSystem
 import akka.kafka.scaladsl.Consumer
 import akka.kafka.{ConsumerSettings, ManualSubscription, Subscriptions}
 import akka.stream.ActorMaterializer
 import akka.stream.scaladsl.Sink
+import com.typesafe.config.ConfigFactory
 import org.apache.kafka.clients.consumer.ConsumerConfig
 import org.apache.kafka.common.TopicPartition
 import org.apache.kafka.common.serialization.{ByteArrayDeserializer, StringDeserializer}
@@ -14,11 +14,12 @@ import scala.concurrent.{ExecutionContextExecutor, Future}
 class PersistanceConsumer {
 
   val system = ActorSystem()
+  val config = ConfigFactory.load()
   implicit val exec: ExecutionContextExecutor = system.dispatcher
   implicit val materializer: ActorMaterializer = ActorMaterializer.create(system)
 
   val TOPIC = "all"
-  private val BROKER_LIST = "kafka:9092"
+  private val BROKER_LIST = config.getString("address")
 
   val consumerSettings: ConsumerSettings[Array[Byte], String] = ConsumerSettings[Array[Byte], String](system, new ByteArrayDeserializer, new StringDeserializer)
     .withBootstrapServers(BROKER_LIST)

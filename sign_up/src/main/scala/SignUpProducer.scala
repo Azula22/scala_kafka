@@ -4,6 +4,7 @@ import akka.kafka.scaladsl.Producer
 import akka.stream.QueueOfferResult.Enqueued
 import akka.stream.scaladsl.{Keep, Source}
 import akka.stream.{ActorMaterializer, OverflowStrategy}
+import com.typesafe.config.{Config, ConfigFactory}
 import org.apache.kafka.clients.producer.{KafkaProducer, ProducerRecord}
 import org.apache.kafka.common.serialization.{ByteArraySerializer, StringSerializer}
 
@@ -12,10 +13,11 @@ import scala.concurrent.{ExecutionContextExecutor, Future}
 
 class SignUpProducer(implicit val mat: ActorMaterializer) {
 
+  val config: Config = ConfigFactory.load()
   implicit val system: ActorSystem = mat.system
   implicit val exec: ExecutionContextExecutor = system.dispatcher
 
-  private val BROKER_LIST = "kafka:9092"
+  private val BROKER_LIST = config.getString("address")
   private val TOPIC = "all"
 
   private val producerSetting = ProducerSettings[Array[Byte], String](system, new ByteArraySerializer, new StringSerializer)
